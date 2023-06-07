@@ -8,8 +8,8 @@ from pymysql.err import IntegrityError
 from sqlalchemy import Table
 
 from database import db
-from model.MessageResponse import LoginResponse, RegisterResponse, Response
-from model.Userauth import Token, UserIn
+from model.MessageResponse import RegisterResponse
+from model.Userauth import Token
 from setting import settings
 from util.validation import validate_email, validate_password
 
@@ -73,7 +73,7 @@ async def register(
 
         return RegisterResponse(status="success", code=201, data={"email": email})
 
-    except IntegrityError as exc_sql:
+    except IntegrityError:
         raise HTTPException(status_code=409, detail="Email Already Registered")
     except Exception as exc:
         raise HTTPException(status_code=500, detail=str(exc))
@@ -106,7 +106,7 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
             "user_profile": {"email": username},
         }
 
-    except IntegrityError as exc_sql:
+    except IntegrityError:
         raise HTTPException(status_code=409, detail="User or Book not exist.")
     except Exception as exc:
         raise HTTPException(status_code=500, detail=str(exc))

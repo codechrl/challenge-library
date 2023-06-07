@@ -1,7 +1,7 @@
 from datetime import date as date_type
 
 from pydantic import BaseModel
-from sqlalchemy import Boolean, Column, Date, DateTime, Integer, String, func, text
+from sqlalchemy import Boolean, Column, Date, Integer, String, text
 from sqlalchemy.ext.declarative import declarative_base
 
 try:

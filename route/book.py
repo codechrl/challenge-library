@@ -1,7 +1,6 @@
 import inspect
-from typing import Annotated
 
-from fastapi import APIRouter, Depends, File, Form, HTTPException, status
+from fastapi import APIRouter, HTTPException, status
 from sqlalchemy import Table, func
 
 from database import db
@@ -98,14 +97,14 @@ async def get_book_details(
             query = query.filter(table.c.title.ilike(f"%{title.lower()}%"))
         if desc:
             query = query.filter(table.c.description.ilike(f"%{desc.lower()}%"))
-        if returned == False:
-            query = query.where(table.c.returned_date == None)
+        if returned is False:
+            query = query.where(table.c.returned_date is None)
         else:
-            query = query.where(table.c.returned_date != None)
-        if late == False:
-            query = query.where(table.c.late == False)
+            query = query.where(table.c.returned_date is not None)
+        if late is False:
+            query = query.where(table.c.late is False)
         else:
-            query = query.where(table.c.late == True)
+            query = query.where(table.c.late is True)
 
         total_count = await database.fetch_val(
             query.with_only_columns(func.count(table.c.id).label("count"))
@@ -171,7 +170,7 @@ async def put_book(id: int, data: BookPut):
 
         query = table.update().where(table.c.id == id).values(data_dict)
 
-        return_id = await database.execute(query)
+        await database.execute(query)
         return Response(
             status="success",
             code=200,
@@ -191,7 +190,7 @@ async def delete_book(id: int):
 
         query = table.delete().where(table.c.id == id)
 
-        return_id = await database.execute(query)
+        await database.execute(query)
         return Response(
             status="success",
             code=200,

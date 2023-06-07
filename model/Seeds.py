@@ -1,5 +1,3 @@
-import databases
-import sqlalchemy
 from sqlalchemy import Table
 
 from database import db

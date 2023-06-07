@@ -1,5 +1,3 @@
-import time
-
 from fastapi import Depends, FastAPI, status
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
@@ -8,9 +6,6 @@ from database import db
 from model.Seeds import run_seeds
 from route import book, borrowing, userauth
 from route.userauth import oauth2_scheme
-
-# time.sleep(60)
-
 
 app = FastAPI(
     title="Library API",

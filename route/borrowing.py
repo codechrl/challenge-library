@@ -1,13 +1,12 @@
 import inspect
 from datetime import datetime, timedelta
-from typing import Annotated
 
-from fastapi import APIRouter, Depends, Form, HTTPException, status
+from fastapi import APIRouter, HTTPException, status
 from sqlalchemy import Table, func
 
 from database import db
 from model.Borrowing import BorrowingPost, BorrowingPut
-from model.MessageResponse import BookResponse, BorrowingResponse, Response
+from model.MessageResponse import BorrowingResponse, Response
 from util.validation import validate_borrowing_user
 
 router = APIRouter()
@@ -122,7 +121,7 @@ async def post_borrowing(id: int, data: BorrowingPut):
 
         query = table.update().where(table.c.id == id).values(data_dict)
 
-        return_id = await database.execute(query)
+        await database.execute(query)
         return Response(
             status="success",
             code=200,
@@ -142,7 +141,7 @@ async def post_borrowing(id: int):
 
         query = table.delete().where(table.c.id == id)
 
-        return_id = await database.execute(query)
+        await database.execute(query)
         return Response(
             status="success",
             code=200,

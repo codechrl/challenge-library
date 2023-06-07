@@ -1,14 +1,8 @@
-import inspect
 import re
-from datetime import datetime, timedelta
-from typing import Annotated
 
-from fastapi import APIRouter, Depends, Form, HTTPException, status
-from sqlalchemy import Table, func
+from sqlalchemy import Table
 
 from database import db
-from model.Borrowing import BorrowingPost
-from model.MessageResponse import BorrowingResponse
 
 
 def validate_email(email):
@@ -36,7 +30,7 @@ async def validate_borrowing_user(user_id):
     query = (
         table.select()
         .with_only_columns(table.c.user_id)
-        .where(table.c.user_id == user_id, table.c.returned_date == None)
+        .where(table.c.user_id == user_id, table.c.returned_date is None)
     )
 
     data = await database.fetch_all(query)
