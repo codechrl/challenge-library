@@ -1,0 +1,35 @@
+version: "3.9"
+
+services:
+  db:
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'library'
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: 'password'
+      MYSQL_ROOT_PASSWORD: 'root-password'
+    ports:
+      - '3306:3306'
+    networks:
+      - network
+    volumes:
+      - my-db:/var/lib/mysql
+
+  fastapi:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '8000:80'
+    networks:
+      - network
+    depends_on:
+      - db
+    restart: always
+
+networks:
+  network:
+
+volumes:
+  my-db:

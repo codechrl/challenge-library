@@ -1,7 +1,10 @@
-import asyncpg
 import databases
 import sqlalchemy
-from settings import settings
+from sqlalchemy.ext.declarative import declarative_base
+
+from setting import settings
+
+Base = declarative_base()
 
 
 class Pool:
@@ -9,7 +12,9 @@ class Pool:
         self.database = databases.Database(settings.DBSTRING)
         self.metadata = sqlalchemy.MetaData()
         self.engine = sqlalchemy.create_engine(
-            settings.DBSTRING, pool_size=1, max_overflow=0
+            settings.DBSTRING,
+            pool_size=1,
+            max_overflow=0,
         )
         self.metadata.create_all(self.engine)
         await self.database.connect()
