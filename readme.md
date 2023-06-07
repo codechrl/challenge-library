@@ -1,4 +1,4 @@
-# **Project Name**
+# **Challenge Library**
 
 This is a project using Python, FastAPI, and MySQL.
 
