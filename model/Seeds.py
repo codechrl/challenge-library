@@ -97,6 +97,7 @@ async def run_seeds():
         for row in borrowings:
             await post_db("borrowing", row)
 
+        print("INFO:", "    Migrations Finished")
         return True
 
     except Exception as exc:

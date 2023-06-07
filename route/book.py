@@ -80,31 +80,23 @@ async def get_book_details(
         database = db.get_database()
         table = Table("book_details", db.get_metadata(), autoload_with=db.get_engine())
 
-        query = table.select().with_only_columns(
-            table.c.id,
-            table.c.title,
-            table.c.description,
-            table.c.borrower_id,
-            table.c.borrower_email,
-            table.c.borrowed_date,
-            table.c.borrowed_due_date,
-            table.c.returned_date,
-            table.c.late,
-        )
+        query = table.select()
         if id:
             query = query.where(table.c.id == id)
         if title:
             query = query.filter(table.c.title.ilike(f"%{title.lower()}%"))
         if desc:
             query = query.filter(table.c.description.ilike(f"%{desc.lower()}%"))
-        if returned is False:
-            query = query.where(table.c.returned_date is None)
-        else:
-            query = query.where(table.c.returned_date is not None)
-        if late is False:
-            query = query.where(table.c.late is False)
-        else:
-            query = query.where(table.c.late is True)
+        if returned:
+            if returned is False:
+                query = query.where(table.c.returned_date is None)
+            else:
+                query = query.where(table.c.returned_date is not None)
+        if late:
+            if late is False:
+                query = query.where(table.c.late is False)
+            else:
+                query = query.where(table.c.late is True)
 
         total_count = await database.fetch_val(
             query.with_only_columns(func.count(table.c.id).label("count"))

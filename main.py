@@ -1,3 +1,5 @@
+import time
+
 from fastapi import Depends, FastAPI, status
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
@@ -60,6 +62,7 @@ app.include_router(
 
 @app.on_event("startup")
 async def startup():
+    time.sleep(60)
     await db.open_pool()
     await run_seeds()
 
